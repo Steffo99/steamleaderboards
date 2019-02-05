@@ -13,6 +13,12 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Steffo99/steamleaderboards",
     packages=setuptools.find_packages(),
+    install_requires=[
+        "lxml",
+        "requests",
+        "bs4"
+    ],
+    python_requires="~=3.6",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
