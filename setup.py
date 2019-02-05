@@ -4,7 +4,7 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 setuptools.setup(
-    name="steamleaderboards-steffo",
+    name="steamleaderboards",
     version="0.0.1",
     author="Stefano Pigozzi",
     author_email="ste.pigozzi@gmail.com",
