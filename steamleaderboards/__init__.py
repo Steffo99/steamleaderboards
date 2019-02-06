@@ -90,6 +90,8 @@ class Leaderboard:
                 entry_end = int(_bs.response.entryend.text)
                 if entry_end < int(_bs.response.totalleaderboardentries.text):
                     next_request_url = f"https://steamcommunity.com/stats/{app_id}/leaderboards/{lbid}/?xml=1&start={entry_end + 1}"
+                else:
+                    next_request_url = None
             else:
                 next_request_url = None
 
