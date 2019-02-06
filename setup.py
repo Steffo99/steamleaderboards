@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="steamleaderboards",
-    version="0.0.1",
+    version="0.0.2",
     author="Stefano Pigozzi",
     author_email="ste.pigozzi@gmail.com",
     description="A wrapper for the Steam Leaderboards",

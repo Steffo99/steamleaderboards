@@ -8,13 +8,14 @@ class LeaderboardGroup:
         xml = requests.get(f"https://steamcommunity.com/stats/{app_id}/leaderboards/?xml=1")
         _bs = BeautifulSoup(xml.content, features="lxml")
         self.leaderboards = []
+        self.app_id = app_id
         for leaderboard in _bs.find_all("leaderboard"):
             self.leaderboards.append(ProtoLeaderboard(leaderboard, app_id))
 
     def __repr__(self):
         return f"<LeaderboardGroup for {self.app_id} with {len(self.leaderboards)} leaderboards>"
 
-    def get(self, name=None, *, display_name=None) -> typing.Optional["Leaderboard"]:
+    def get(self, name=None, *, lbid=None, display_name=None) -> typing.Optional["Leaderboard"]:
         """Get the full leaderboard with the specified parameter."""
         if bool(lbid) + bool(name) + bool(display_name) > 1:
             raise ValueError("You can only find a leaderboard by 1 parameter.")
