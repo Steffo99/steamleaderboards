@@ -1,12 +1,34 @@
+<div align="center">
+
+![](.media/icon-128x128_round.png)
+
 # `steamleaderboards`
 
-A package designed to help developers access the leaderboards of various Steam games.
+Retrieve and parse Steam leaderboards
 
-It was created with the Isaac Daily Run scoreboards in mind, but it can be used for other games as well.
+</div>
+
+## History
+
+It was created with the Isaac Daily Run scoreboards in mind, but it can be used for other games that have a public leaderboard as well.
 
 ## Usage
 
-To use `steamleaderboards`, first create a `LeaderboardGroup` for the desired game.
+### In code
+
+To use `steamleaderboards`, first install it via PyPI:
+
+```console
+$ # If you're using pip in a venv on 
+$ .venv/bin/pip install steamleaderboards --upgrade
+```
+
+```console
+$ # If you're using poetry 
+$ poetry add steamleaderboards
+```
+
+Then, create a `LeaderboardGroup` for the desired game.
 
 ```python
 import steamleaderboards as sl
@@ -30,3 +52,22 @@ my_score = leaderboard_a.find_entry(MY_STEAMID_1)
 first_place_score = leaderboard_a.find_entry(rank=1)
 last_place_score = leaderboard_a.find_entry(rank=-1)
 ```
+
+### In the terminal
+
+To use `steamleaderboards`, first install it via PyPI:
+
+```console
+$ # Using pipx
+$ pipx install steamleaderboards
+```
+
+Then, you can use it to retrieve leaderboards for one or more Steam games via the terminal:
+
+```console
+$ steamleaderboards --output_dir="./data" 440
+```
+
+This will download all leaderboards for Team Fortress 2, the game with the app id `440`, to the `./data` directory.
+
+App ids for games can be found via [SteamDB](https://steamdb.info/).

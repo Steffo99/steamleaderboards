@@ -6,7 +6,7 @@ import typing
 class LeaderboardGroup:
     def __init__(self, app_id):
         xml = requests.get(f"https://steamcommunity.com/stats/{app_id}/leaderboards/?xml=1")
-        _bs = BeautifulSoup(xml.content, features="lxml")
+        _bs = BeautifulSoup(xml.content, features="lxml-xml")
         self.leaderboards = []
         self.app_id = app_id
         for leaderboard in _bs.find_all("leaderboard"):
@@ -71,7 +71,7 @@ class Leaderboard:
         elif app_id and lbid:
             self.lbid = lbid
             self.app_id = app_id
-            self.url = None
+            self.url = f"https://steamcommunity.com/stats/{self.app_id}/leaderboards/{self.lbid}/?xml=1"
             self.name = None
             self.display_name = None
             self.entries = None
@@ -79,17 +79,17 @@ class Leaderboard:
             self.display_type = None
         else:
             raise ValueError("No app_id, lbid or protoleaderboard specified")
-        next_request_url = f"https://steamcommunity.com/stats/{self.app_id}/leaderboards/{self.lbid}/?xml=1"
+        next_request_url = self.url
         self.entries = []
         while next_request_url:
             xml = requests.get(next_request_url)
-            _bs = BeautifulSoup(xml.content, features="lxml")
+            _bs = BeautifulSoup(xml.content, features="lxml-xml")
             for entry in _bs.find_all("entry"):
                 self.entries.append(Entry(entry))
             if _bs.response.entryend:
                 entry_end = int(_bs.response.entryend.text)
                 if entry_end < int(_bs.response.totalleaderboardentries.text):
-                    next_request_url = f"https://steamcommunity.com/stats/{app_id}/leaderboards/{lbid}/?xml=1&start={entry_end + 1}"
+                    next_request_url = f"https://steamcommunity.com/stats/{self.app_id}/leaderboards/{self.lbid}/?xml=1&start={entry_end + 1}"
                 else:
                     next_request_url = None
             else:
