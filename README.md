@@ -8,6 +8,10 @@ Retrieve and parse Steam leaderboards
 
 </div>
 
+## Links
+
+[![PyPI](https://img.shields.io/pypi/v/steamleaderboards)](https://pypi.org/project/steamleaderboards)
+
 ## History
 
 It was created with the Isaac Daily Run scoreboards in mind, but it can be used for other games that have a public leaderboard as well.
