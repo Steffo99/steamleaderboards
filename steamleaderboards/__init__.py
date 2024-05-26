@@ -59,7 +59,7 @@ class ProtoLeaderboard:
 
 class Leaderboard:
     # noinspection PyMissingConstructor
-    def __init__(self, app_id=None, lbid=None, *, protoleaderboard=None, limit=5000, delay=None):
+    def __init__(self, app_id=None, lbid=None, *, protoleaderboard=None, limit=None, delay=None):
         if protoleaderboard:
             self.url = protoleaderboard.url
             self.lbid = protoleaderboard.lbid
@@ -80,6 +80,8 @@ class Leaderboard:
             self.display_type = None
         else:
             raise ValueError("No app_id, lbid or protoleaderboard specified")
+        if limit is None:
+            limit = 5000
         if delay is None:
             delay = 0.5
         next_request_url = self.url
@@ -89,12 +91,16 @@ class Leaderboard:
             _bs = BeautifulSoup(xml.content, features="lxml-xml")
             for entry in _bs.find_all("entry"):
                 self.entries.append(Entry(entry))
-            try:
-                next_request_url = _bs.find_all("nextRequestURL")[0].text
-            except IndexError:
-                next_request_url = None
+                if len(self.entries) >= limit:
+                    next_request_url = None
+                    break
             else:
-                time.sleep(delay)
+                try:
+                    next_request_url = _bs.find_all("nextRequestURL")[0].text
+                except IndexError:
+                    next_request_url = None
+                else:
+                    time.sleep(delay)
 
     def __repr__(self):
         if self.name:

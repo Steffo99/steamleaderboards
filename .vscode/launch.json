@@ -6,7 +6,7 @@
 			"type": "debugpy",
 			"request": "launch",
 			"module": "steamleaderboards",
-			"args": ["-o", "./data", "383980"]
+			"args": ["-o", "./data", "383980", "--limit", "10", "--request-delay", "1.5"]
 		}
 	]
 }
