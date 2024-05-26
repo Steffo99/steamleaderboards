@@ -86,13 +86,9 @@ class Leaderboard:
             _bs = BeautifulSoup(xml.content, features="lxml-xml")
             for entry in _bs.find_all("entry"):
                 self.entries.append(Entry(entry))
-            if _bs.response.entryend:
-                entry_end = int(_bs.response.entryend.text)
-                if entry_end < int(_bs.response.totalleaderboardentries.text):
-                    next_request_url = f"https://steamcommunity.com/stats/{self.app_id}/leaderboards/{self.lbid}/?xml=1&start={entry_end + 1}"
-                else:
-                    next_request_url = None
-            else:
+            try:
+                next_request_url = _bs.find_all("nextRequestURL")[0].text
+            except IndexError:
                 next_request_url = None
 
     def __repr__(self):
