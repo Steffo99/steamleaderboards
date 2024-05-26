@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import typing
+import time
 
 
 class LeaderboardGroup:
@@ -52,13 +53,13 @@ class ProtoLeaderboard:
         self.display_type = int(soup.displaytype.text)
         self.app_id = app_id
 
-    def full(self) -> "Leaderboard":
-        return Leaderboard(protoleaderboard=self)
+    def full(self, *args, **kwargs) -> "Leaderboard":
+        return Leaderboard(*args, **kwargs, protoleaderboard=self)
 
 
 class Leaderboard:
     # noinspection PyMissingConstructor
-    def __init__(self, app_id=None, lbid=None, *, protoleaderboard=None):
+    def __init__(self, app_id=None, lbid=None, *, protoleaderboard=None, limit=5000, delay=None):
         if protoleaderboard:
             self.url = protoleaderboard.url
             self.lbid = protoleaderboard.lbid
@@ -79,6 +80,8 @@ class Leaderboard:
             self.display_type = None
         else:
             raise ValueError("No app_id, lbid or protoleaderboard specified")
+        if delay is None:
+            delay = 0.5
         next_request_url = self.url
         self.entries = []
         while next_request_url:
@@ -90,6 +93,8 @@ class Leaderboard:
                 next_request_url = _bs.find_all("nextRequestURL")[0].text
             except IndexError:
                 next_request_url = None
+            else:
+                time.sleep(delay)
 
     def __repr__(self):
         if self.name:
