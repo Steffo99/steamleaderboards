@@ -16,7 +16,7 @@ class LeaderboardGroup:
     def __repr__(self):
         return f"<LeaderboardGroup for {self.app_id} with {len(self.leaderboards)} leaderboards>"
 
-    def get(self, name=None, *, lbid=None, display_name=None) -> typing.Optional["Leaderboard"]:
+    def get(self, name=None, *, lbid=None, display_name=None, **kwargs) -> typing.Optional["Leaderboard"]:
         """Get the full leaderboard with the specified parameter."""
         if bool(lbid) + bool(name) + bool(display_name) > 1:
             raise ValueError("You can only find a leaderboard by 1 parameter.")
@@ -25,19 +25,19 @@ class LeaderboardGroup:
                 raise ValueError("lbid must be an int")
             for leaderboard in self.leaderboards:
                 if leaderboard.lbid == lbid:
-                    return leaderboard.full()
+                    return leaderboard.full(**kwargs)
         elif name is not None:
             if not isinstance(name, str):
                 raise ValueError("name must be a str")
             for leaderboard in self.leaderboards:
                 if leaderboard.name == name:
-                    return leaderboard.full()
+                    return leaderboard.full(**kwargs)
         elif display_name is not None:
             if not isinstance(display_name, str):
                 raise ValueError("display_name must be a str")
             for leaderboard in self.leaderboards:
                 if leaderboard.display_name == display_name:
-                    return leaderboard.full()
+                    return leaderboard.full(**kwargs)
         return None
 
 
@@ -53,8 +53,8 @@ class ProtoLeaderboard:
         self.display_type = int(soup.displaytype.text)
         self.app_id = app_id
 
-    def full(self, *args, **kwargs) -> "Leaderboard":
-        return Leaderboard(*args, **kwargs, protoleaderboard=self)
+    def full(self, **kwargs) -> "Leaderboard":
+        return Leaderboard(**kwargs, protoleaderboard=self)
 
 
 class Leaderboard:
