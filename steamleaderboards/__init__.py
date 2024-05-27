@@ -93,6 +93,7 @@ class Leaderboard:
                 self.entries.append(Entry(entry))
                 if len(self.entries) >= limit:
                     next_request_url = None
+                    self.entries = self.entries[:limit]
                     break
             else:
                 try:
